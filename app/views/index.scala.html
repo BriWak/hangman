@@ -1,0 +1,62 @@
+
+@(formattedGameWord: String, gameState: String, game: Hangman)
+
+@main("Welcome to Hangman") {
+  <h1>Welcome to Hangman!</h1>
+<br>
+<P>@formattedGameWord</P>
+<br>
+<P>@gameState</P>
+
+<table>
+  <tr>
+    <td><a href="@routes.HomeController.guess("A")"><img src="@routes.Assets.versioned("images/A.png")" class="letters" id="A" alt="A"></a></td>
+    <td><a href="@routes.HomeController.guess("B")"><img src="@routes.Assets.versioned("images/B.png")" class="letters" id="B" alt="B"></a></td>
+    <td><a href="@routes.HomeController.guess("C")"><img src="@routes.Assets.versioned("images/C.png")" class="letters" id="C" alt="C"></a></td>
+    <td><a href="@routes.HomeController.guess("D")"><img src="@routes.Assets.versioned("images/D.png")" class="letters" id="D" alt="D"></a></td>
+    <td><a href="@routes.HomeController.guess("E")"><img src="@routes.Assets.versioned("images/E.png")" class="letters" id="E" alt="E"></a></td>
+  </tr>
+  <tr>
+    <td><a href="@routes.HomeController.guess("F")"><img src="@routes.Assets.versioned("images/F.png")" class="letters" id="F" alt="F"></a></td>
+    <td><a href="@routes.HomeController.guess("G")"><img src="@routes.Assets.versioned("images/G.png")" class="letters" id="G" alt="G"></a></td>
+    <td><a href="@routes.HomeController.guess("H")"><img src="@routes.Assets.versioned("images/H.png")" class="letters" id="H" alt="H"></a></td>
+    <td><a href="@routes.HomeController.guess("I")"><img src="@routes.Assets.versioned("images/I.png")" class="letters" id="I" alt="I"></a></td>
+    <td><a href="@routes.HomeController.guess("J")"><img src="@routes.Assets.versioned("images/J.png")" class="letters" id="J" alt="J"></a></td>
+  </tr>
+  <tr>
+    <td><a href="@routes.HomeController.guess("K")"><img src="@routes.Assets.versioned("images/K.png")" class="letters" id="K" alt="K"></a></td>
+    <td><a href="@routes.HomeController.guess("L")"><img src="@routes.Assets.versioned("images/L.png")" class="letters" id="L" alt="L"></a></td>
+    <td><a href="@routes.HomeController.guess("M")"><img src="@routes.Assets.versioned("images/M.png")" class="letters" id="M" alt="M"></a></td>
+    <td><a href="@routes.HomeController.guess("N")"><img src="@routes.Assets.versioned("images/N.png")" class="letters" id="N" alt="N"></a></td>
+    <td><a href="@routes.HomeController.guess("O")"><img src="@routes.Assets.versioned("images/O.png")" class="letters" id="O" alt="O"></a></td>
+  </tr>
+  <tr>
+    <td><a href="@routes.HomeController.guess("P")"><img src="@routes.Assets.versioned("images/P.png")" class="letters" id="P" alt="P"></a></td>
+    <td><a href="@routes.HomeController.guess("Q")"><img src="@routes.Assets.versioned("images/Q.png")" class="letters" id="Q" alt="Q"></a></td>
+    <td><a href="@routes.HomeController.guess("R")"><img src="@routes.Assets.versioned("images/R.png")" class="letters" id="R" alt="R"></a></td>
+    <td><a href="@routes.HomeController.guess("S")"><img src="@routes.Assets.versioned("images/S.png")" class="letters" id="S" alt="S"></a></td>
+    <td><a href="@routes.HomeController.guess("T")"><img src="@routes.Assets.versioned("images/T.png")" class="letters" id="T" alt="T"></a></td>
+  </tr>
+  <tr>
+    <td><a href="@routes.HomeController.guess("U")"><img src="@routes.Assets.versioned("images/U.png")" class="letters" id="U" alt="U"></a></td>
+    <td><a href="@routes.HomeController.guess("V")"><img src="@routes.Assets.versioned("images/V.png")" class="letters" id="V" alt="V"></a></td>
+    <td><a href="@routes.HomeController.guess("W")"><img src="@routes.Assets.versioned("images/W.png")" class="letters" id="W" alt="W"></a></td>
+    <td><a href="@routes.HomeController.guess("X")"><img src="@routes.Assets.versioned("images/X.png")" class="letters" id="X" alt="X"></a></td>
+    <td><a href="@routes.HomeController.guess("Y")"><img src="@routes.Assets.versioned("images/Y.png")" class="letters" id="Y" alt="Y"></a></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td><a href="@routes.HomeController.guess("Z")"><img src="@routes.Assets.versioned("images/Z.png")" class="letters" id="Z" alt="Z"></a></td>
+    <td></td>
+    <td></td>
+  </tr>
+
+</table>
+<div class="usedLetters">
+  <p>Your guesses so far are:</p>
+  @for(letter <- game.guessedLetters) {
+  <img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" alt=letter>
+  }
+</div>
+}

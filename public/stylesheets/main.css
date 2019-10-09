@@ -1,0 +1,25 @@
+body { font-family: Courier New, Courier, monospace; }
+
+.letters {
+    width: 50px;
+}
+
+.letters:hover,
+.letters:focus {
+    outline: 2px solid black;
+}
+
+.letters:focus {
+    outline: 2px solid black;
+    outline-offset: -4px;
+}
+
+.letters:active {
+    transform: scale(0.95);
+}
+
+.used {
+    width: 50px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  }
