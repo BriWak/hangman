@@ -1,4 +1,30 @@
-body { font-family: Courier New, Courier, monospace; }
+body {
+    font-family: Courier New, Courier, monospace;
+}
+
+p, h1 {
+padding: 10px;
+}
+
+.contentWrapper {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.gameBoard {
+    font-size: 26px;
+    font-weight: bolder;
+}
+
+.hangman {
+    width: 300px;
+}
+
+.letterTable {
+    margin: auto;
+    width: 50%;
+}
 
 .letters {
     width: 50px;
@@ -22,4 +48,27 @@ body { font-family: Courier New, Courier, monospace; }
     width: 50px;
     opacity: 0.5;
     filter: alpha(opacity=50);
-  }
+}
+
+@media screen and (max-width: 600px) {
+    .contentWrapper {
+        width: 100%;
+    }
+
+    .gameBoard {
+        font-size: 0.5em;
+    }
+
+    .hangman {
+        width: 160px;
+    }
+
+    .letters {
+        width: 25px;
+    }
+
+    .used {
+        width: 25px;
+    }
+
+}

@@ -24,7 +24,8 @@ class HangmanService {
     } else {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
-        Hangman(game.word, game.partialWord, game.guessedLetters :+ formattedLetter, game.remainingGuesses - 1)
+        val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses -1
+        Hangman(game.word, game.partialWord, game.guessedLetters :+ formattedLetter, remainingGuesses)
       } else {
         Hangman(game.word, wordSoFar, game.guessedLetters :+ formattedLetter, game.remainingGuesses)
       }
