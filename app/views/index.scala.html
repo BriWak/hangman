@@ -1,16 +1,22 @@
-@(formattedGameWord: String, gameState: String, game: Hangman)
+@import viewModels.Letter
+
+@(formattedGameWord: String, gameState: String, game: Hangman, letters: List[Letter])
 
 @main("Welcome to Hangman") {
     <h1>Welcome to Hangman!</h1>
 
     <img src="@routes.Assets.versioned("images/hangman " + game.remainingGuesses + ".svg")" class="hangman" alt="Hangman">
 
-  <div class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">
+    <div class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">
     @gameState
-  </div>
+    </div>
 
     <P class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">@formattedGameWord</P>
 
-    @letterBoard('A', 'Z', game)
+    @if(game.remainingGuesses <= 0) {
+        <a href="@routes.HomeController.index()">Play Again</a>
 
+    } else {
+        @letterBoard(letters)
+    }
 }

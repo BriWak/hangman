@@ -3,6 +3,7 @@ package services
 import com.google.inject.Inject
 import connectors.ImdbConnector
 import models.Hangman
+import viewModels.Letter
 
 import scala.concurrent.Future
 import scala.util.Random
@@ -66,4 +67,10 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
     }
   }
 
+  def createLetters(firstLetter: Char, secondLetter: Char, game: Hangman): List[Letter] = {
+    (firstLetter to secondLetter).toList.map { letter =>
+      Letter(letter, controllers.routes.Assets.versioned("images/" + letter + ".png").url,
+        controllers.routes.HomeController.guess(letter).url, game.guessedLetters.contains(letter.toString))
+    }
+  }
 }

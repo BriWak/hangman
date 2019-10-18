@@ -1,12 +1,16 @@
 
-@(firstLetter: Char, secondLetter: Char, game: Hangman)
+@import viewModels.Letter
+
+@(letters: List[Letter])
 
 <div class="letterTable">
-    @for(letter <- (firstLetter to secondLetter)) {
-      @if(game.guessedLetters.contains(letter.toString)) {
-        <span><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></span>
+    @for(guessLetter <- letters) {
+      @if(guessLetter.used) {
+           <span><img src="@guessLetter.imageUrl" class="used" id=guessLetter.letter alt=guessLetter.letter></span>
       } else {
-        <span><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></span>
+        <span>
+            <a href="@guessLetter.guessUrl"><img src="@guessLetter.imageUrl" class="letters" id=guessLetter.letter alt=guessLetter.letter></a>
+        </span>
       }
     }
 </div>

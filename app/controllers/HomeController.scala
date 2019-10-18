@@ -46,6 +46,7 @@ class HomeController @Inject()(cc: ControllerComponents, hangmanService: Hangman
     val partialWord = if (game.remainingGuesses <= 0) game.word else game.partialWord
       val gameWord = hangmanService.formatGameWord(partialWord)
       val gameState = hangmanService.checkGameState(game)
-      Ok(views.html.index(gameWord, gameState, game))
+      val letters = hangmanService.createLetters('A','Z', game)
+      Ok(views.html.index(gameWord, gameState, game, letters))
   }
 }
