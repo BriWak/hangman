@@ -1,20 +1,32 @@
 package services
 
+import com.google.inject.Inject
+import connectors.ImdbConnector
 import models.Hangman
 
-class HangmanService {
+import scala.concurrent.Future
+import scala.util.Random
+import scala.concurrent.ExecutionContext.Implicits.global
 
+class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
-  val films = List("Terminator Two: Judgement Day")
-
-  def getRandomFilm: Hangman = {
-    val word: String = films.head.toUpperCase
-
-    Hangman(word, word.map(char => if (char == ' ' || char == ':') char else '_'), List.empty[String], 6)
+  def getRandomFilm: Future[Hangman] = {
+    imdbConnector.getFilms().map { films =>
+      val word = films(Random.nextInt(films.length)).toUpperCase
+      val displayableChars = List(' ', '\'', '!', '?', ',', '-', ':')
+      Hangman(word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
+    }
   }
 
   def formatGameWord(word: String): String = {
-    word.toList.map(char => if (char == ' ')  "\u00A0\u00A0" else s"$char\u00A0").mkString
+//    val splitWord = if (word.length >= 18) {
+//      println("***********"+ word.length)
+//      val splitAt = word.substring(word.length/2).indexOf(" ")+(word.length/2)
+//      println("***********"+ splitAt)
+//      val (lineOne, lineTwo) = word.splitAt(splitAt)
+//      s"${lineOne.trim}\n${lineTwo.trim}"
+//    } else word
+    word.toList.map(char => if (char == ' ') "\u00A0\n" else s"$char\u00A0").mkString
   }
 
   def guessLetter(letter: String, game: Hangman): Hangman = {
@@ -24,12 +36,12 @@ class HangmanService {
     } else {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
-        val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses -1
+        val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
         Hangman(game.word, game.partialWord, game.guessedLetters :+ formattedLetter, remainingGuesses)
       } else {
         Hangman(game.word, wordSoFar, game.guessedLetters :+ formattedLetter, game.remainingGuesses)
       }
-      }
+    }
   }
 
   private def showLetters(letter: String, game: Hangman): String = {

@@ -1,10 +1,12 @@
 package controllers
 
+import connectors.ImdbConnector
 import javax.inject._
 import models.Hangman
 import play.api._
 import play.api.mvc._
 import services.{DataService, HangmanService}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -12,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents, hangmanService: HangmanService, dataService: DataService) extends AbstractController(cc) {
+class HomeController @Inject()(cc: ControllerComponents, hangmanService: HangmanService, dataService: DataService, imdbConnector: ImdbConnector) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page.
@@ -22,10 +24,10 @@ class HomeController @Inject()(cc: ControllerComponents, hangmanService: Hangman
    * a path of `/`.
    */
   def index(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    dataService.createGame(hangmanService.getRandomFilm).map { game =>
-      val gameWord = hangmanService.formatGameWord(game.partialWord)
-      val gameState = hangmanService.checkGameState(game)
-      Ok(views.html.index(gameWord, gameState, game))
+    hangmanService.getRandomFilm.flatMap { newGame =>
+      dataService.createGame(newGame).map { game =>
+        displayView(game)
+      }
     }
   }
 
@@ -34,12 +36,16 @@ class HomeController @Inject()(cc: ControllerComponents, hangmanService: Hangman
       gameOption.fold(throw new Exception("Error retrieving game")) { game =>
         val updatedGame = hangmanService.guessLetter(letter, game)
         dataService.updateGame("game1", updatedGame).map { game =>
-          val gameWord = hangmanService.formatGameWord(game.partialWord)
-          val gameState = hangmanService.checkGameState(game)
-          Ok(views.html.index(gameWord, gameState, game))
+          displayView(game)
         }
       }
     }
   }
 
+  private def displayView(game: Hangman): Result = {
+    val partialWord = if (game.remainingGuesses <= 0) game.word else game.partialWord
+      val gameWord = hangmanService.formatGameWord(partialWord)
+      val gameState = hangmanService.checkGameState(game)
+      Ok(views.html.index(gameWord, gameState, game))
+  }
 }

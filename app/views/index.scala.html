@@ -1,72 +1,16 @@
-
 @(formattedGameWord: String, gameState: String, game: Hangman)
 
 @main("Welcome to Hangman") {
-  <h1>Welcome to Hangman!</h1>
+    <h1>Welcome to Hangman!</h1>
 
-  <img src="@routes.Assets.versioned("images/hangman " + game.remainingGuesses + ".svg")" class="hangman" alt="Hangman">
+    <img src="@routes.Assets.versioned("images/hangman " + game.remainingGuesses + ".svg")" class="hangman" alt="Hangman">
 
-  <P class="gameBoard">@formattedGameWord</P>
-
-  <table class="letterTable">
-    <tr>
-      @for(letter <- ('A' to 'E').map(_.toString)) {
-        @if(game.guessedLetters.contains(letter)) {
-          <td><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></td>
-        } else {
-          <td><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></td>
-        }
-      }
-    </tr>
-    <tr>
-      @for(letter <- ('F' to 'J').map(_.toString)) {
-        @if(game.guessedLetters.contains(letter)) {
-          <td><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></td>
-        } else {
-          <td><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></td>
-        }
-      }
-    </tr>
-    <tr>
-      @for(letter <- ('K' to 'O').map(_.toString)) {
-        @if(game.guessedLetters.contains(letter)) {
-          <td><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></td>
-        } else {
-          <td><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></td>
-        }
-      }
-    </tr>
-    <tr>
-      @for(letter <- ('P' to 'T').map(_.toString)) {
-        @if(game.guessedLetters.contains(letter)) {
-          <td><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></td>
-        } else {
-          <td><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></td>
-        }
-      }
-    </tr>
-    <tr>
-      @for(letter <- ('U' to 'Y').map(_.toString)) {
-        @if(game.guessedLetters.contains(letter)) {
-          <td><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></td>
-        } else {
-          <td><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></td>
-        }
-      }
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      @if(game.guessedLetters.contains("Z")) {
-        <td><img src="@routes.Assets.versioned("images/Z.png")" class="used" id=letter alt=letter></td>
-      } else {
-        <td><a href="@routes.HomeController.guess("Z")"><img src="@routes.Assets.versioned("images/Z.png")" class="letters" id="Z" alt="Z"></a></td>
-      }
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
-  <div>
-    <P>@gameState</P>
+  <div class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">
+    @gameState
   </div>
+
+    <P class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">@formattedGameWord</P>
+
+    @letterBoard('A', 'Z', game)
+
 }
