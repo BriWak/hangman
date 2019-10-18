@@ -2,8 +2,8 @@
 @(firstLetter: Char, secondLetter: Char, game: Hangman)
 
 <div class="letterTable">
-    @for(letter <- (firstLetter to secondLetter).map(_.toString)) {
-      @if(game.guessedLetters.contains(letter)) {
+    @for(letter <- (firstLetter to secondLetter)) {
+      @if(game.guessedLetters.contains(letter.toString)) {
         <span><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="used" id=letter alt=letter></span>
       } else {
         <span><a href="@routes.HomeController.guess(letter)"><img src="@routes.Assets.versioned("images/" + letter + ".png")" class="letters" id=letter alt=letter></a></span>

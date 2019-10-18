@@ -31,7 +31,7 @@ class HomeController @Inject()(cc: ControllerComponents, hangmanService: Hangman
     }
   }
 
-  def guess(letter: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def guess(letter: Char): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     dataService.readGame("game1").flatMap { gameOption =>
       gameOption.fold(throw new Exception("Error retrieving game")) { game =>
         val updatedGame = hangmanService.guessLetter(letter, game)
