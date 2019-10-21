@@ -5,7 +5,11 @@
 @main("Welcome to Hangman") {
     <h1>Welcome to Hangman!</h1>
 
-    <img src="@routes.Assets.versioned("images/hangman " + game.remainingGuesses + ".svg")" class="hangman" alt="Hangman">
+    <div class="wrapper">
+        <figure class="innerWrapper">
+            <img src="@routes.Assets.versioned("images/hangman " + game.remainingGuesses + ".svg")" class="hangman" alt="Hangman">
+        </figure>
+    </div>
 
     <div class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">
     @gameState

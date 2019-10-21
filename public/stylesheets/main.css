@@ -27,9 +27,23 @@ padding: 10px;
     color: red;
 }
 
+.wrapper {
+    max-width: 300px;
+    margin: auto;
+}
+
+.innerWrapper {
+    padding-bottom: 100%;
+    position: relative;
+}
+
 .hangman {
     width: 300px;
     height: 300px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,0);
+    z-index: 1;
 }
 
 .letterTable {
@@ -108,6 +122,9 @@ padding: 10px;
         font-size: 0.9em;
     }
 
+    .wrapper {
+        max-width: 160px;
+    }
     .hangman {
         width: 160px;
         height: 160px;
