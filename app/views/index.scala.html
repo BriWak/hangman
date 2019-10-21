@@ -13,8 +13,8 @@
 
     <P class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">@formattedGameWord</P>
 
-    @if(game.remainingGuesses <= 0) {
-        <a href="@routes.HomeController.index()">Play Again</a>
+    @if(gameState == "Winner" || gameState == "Game Over") {
+        <a class="button" href="@routes.HomeController.index()">Play Again</a>
 
     } else {
         @letterBoard(letters)
