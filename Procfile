@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/hangedman -Dhttp.port=${PORT} -Dconfig.resource=production.conf
+web: target/universal/stage/bin/hangman -Dhttp.port=${PORT} -Dconfig.resource=production.conf
