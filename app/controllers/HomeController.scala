@@ -1,11 +1,11 @@
 package controllers
 
 import connectors.ImdbConnector
+import controllers.auth.AuthAction
 import javax.inject._
 import models.Hangman
-import play.api._
 import play.api.mvc._
-import services.{DataService, HangmanService}
+import services.{AuthService, DataService, HangmanService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -14,7 +14,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents, hangmanService: HangmanService, dataService: DataService, imdbConnector: ImdbConnector) extends AbstractController(cc) {
+class HomeController @Inject()(cc: ControllerComponents,
+                               sessionAction: AuthAction,
+                               hangmanService: HangmanService,
+                               authService: AuthService,
+                               dataService: DataService,
+                               imdbConnector: ImdbConnector) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page.
@@ -23,22 +28,31 @@ class HomeController @Inject()(cc: ControllerComponents, hangmanService: Hangman
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    hangmanService.getRandomFilm.flatMap { newGame =>
+  def index(): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
+    val uuid = request.session.get("UUID").get
+    hangmanService.getRandomFilm(uuid).flatMap { newGame =>
+      dataService.deleteGame(uuid).flatMap{ _ =>
       dataService.createGame(newGame).map { game =>
         displayView(game)
+      }
+    }}
+  }
+
+  def guess(letter: Char): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
+    val uuid = request.session.get("UUID").get
+    dataService.readGame(uuid).flatMap { gameOption =>
+      gameOption.fold(throw new Exception("Error retrieving game")) { game =>
+        val updatedGame = hangmanService.guessLetter(letter, game)
+        dataService.updateGame(uuid, updatedGame).map { game =>
+          displayView(game)
+        }
       }
     }
   }
 
-  def guess(letter: Char): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    dataService.readGame("game1").flatMap { gameOption =>
-      gameOption.fold(throw new Exception("Error retrieving game")) { game =>
-        val updatedGame = hangmanService.guessLetter(letter, game)
-        dataService.updateGame("game1", updatedGame).map { game =>
-          displayView(game)
-        }
-      }
+  def createSession(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+    authService.addAuthUUID().map { userSession =>
+      Redirect(routes.HomeController.index()).addingToSession("UUID" -> userSession.uuid)
     }
   }
 

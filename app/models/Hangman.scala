@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Hangman(word: String, partialWord: String, guessedLetters: List[String], remainingGuesses: Int, alreadyGuessed: Boolean = false)
+case class Hangman(gameId: String, word: String, partialWord: String, guessedLetters: List[String], remainingGuesses: Int, alreadyGuessed: Boolean = false)
 
 object Hangman {
 

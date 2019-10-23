@@ -11,22 +11,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
-  def getRandomFilm: Future[Hangman] = {
+  def getRandomFilm(newGameId: String): Future[Hangman] = {
     imdbConnector.getFilms().map { films =>
       val word = films(Random.nextInt(films.length)).toUpperCase
       val displayableChars = List(' ', '\'', '!', '?', ',', '.', '-', ':')
-      Hangman(word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
+      Hangman(newGameId, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }
   }
 
   def formatGameWord(word: String): String = {
-//    val splitWord = if (word.length >= 18) {
-//      println("***********"+ word.length)
-//      val splitAt = word.substring(word.length/2).indexOf(" ")+(word.length/2)
-//      println("***********"+ splitAt)
-//      val (lineOne, lineTwo) = word.splitAt(splitAt)
-//      s"${lineOne.trim}\n${lineTwo.trim}"
-//    } else word
     val formattedWord = word.trim.toList.map(char => if (char == ' ') "\u00A0\n" else s"$char\u00A0").mkString
     formattedWord.take(formattedWord.length-1)
   }
@@ -39,9 +32,9 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
         val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
-        Hangman(game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses)
+        Hangman(game.gameId, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses)
       } else {
-        Hangman(game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses)
+        Hangman(game.gameId, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses)
       }
     }
   }
@@ -57,12 +50,11 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
   }
 
-
   def checkGameState(game: Hangman): String = {
     game match {
-      case Hangman(_, _, _, 0, _) => "Game Over"
-      case Hangman(word, partialWord, _, _, _) if word == partialWord => "Winner"
-      case Hangman(_, _, _, _, true) => "You have already guessed that letter"
+      case Hangman(_,_, _, _, 0, _) => "Game Over"
+      case Hangman(_,word, partialWord, _, _, _) if word == partialWord => "Winner"
+      case Hangman(_,_, _, _, _, true) => "You have already guessed that letter"
       case _ => ""
     }
   }
