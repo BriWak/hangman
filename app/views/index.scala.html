@@ -4,6 +4,7 @@
 
 @main("Welcome to Hangman") {
     <h1>Welcome to Hangman!</h1>
+    <img src="@routes.Assets.versioned("images/moviedb.svg")" class="poweredby" alt="Powered by the movie DB">
 
     <div class="wrapper">
         <figure class="innerWrapper">
@@ -16,6 +17,7 @@
     </div>
 
     <P class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">@formattedGameWord</P>
+
 
     @if(gameState == "Winner" || gameState == "Game Over") {
         <p><a href="@game.url">View details of this film</a></p>
