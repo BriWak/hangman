@@ -13,9 +13,10 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
   def getRandomFilm(newGameId: String): Future[Hangman] = {
     imdbConnector.getFilms().map { films =>
-      val word = films(Random.nextInt(films.length)).toUpperCase
+      val film = films(Random.nextInt(films.length))
+      val word = film.name.toUpperCase
       val displayableChars = List(' ', '\'', '!', '?', ',', '.', '-', ':')
-      Hangman(newGameId, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
+      Hangman(newGameId, film.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }
   }
 
@@ -32,9 +33,9 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
         val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
-        Hangman(game.gameId, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses)
+        Hangman(game.gameId, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses)
       } else {
-        Hangman(game.gameId, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses)
+        Hangman(game.gameId, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses)
       }
     }
   }
@@ -52,9 +53,9 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
   def checkGameState(game: Hangman): String = {
     game match {
-      case Hangman(_,_, _, _, 0, _,_) => "Game Over"
-      case Hangman(_,word, partialWord, _, _, _,_) if word == partialWord => "Winner"
-      case Hangman(_,_, _, _, _, true,_) => "You have already guessed that letter"
+      case Hangman(_,_,_, _, _, 0, _,_) => "Game Over"
+      case Hangman(_,_,word, partialWord, _, _, _,_) if word == partialWord => "Winner"
+      case Hangman(_,_,_, _, _, _, true,_) => "You have already guessed that letter"
       case _ => ""
     }
   }
