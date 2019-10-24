@@ -6,6 +6,12 @@ p, h1 {
 padding: 10px;
 }
 
+.poweredby {
+    width: 120px;
+    transform: translate(80%,0);
+    position: absolute;
+}
+
 .contentWrapper {
     margin: auto;
     width: 50%;
@@ -109,6 +115,10 @@ padding: 10px;
 }
 
 @media screen and (max-width: 600px) {
+    .poweredby {
+        width: 70px;
+    }
+
     .contentWrapper {
         width: 100%;
     }

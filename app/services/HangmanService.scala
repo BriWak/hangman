@@ -1,7 +1,7 @@
 package services
 
 import com.google.inject.Inject
-import connectors.ImdbConnector
+import connectors.FilmConnector
 import models.Hangman
 import viewModels.Letter
 
@@ -9,12 +9,12 @@ import scala.concurrent.Future
 import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HangmanService @Inject()(imdbConnector: ImdbConnector) {
+class HangmanService @Inject()(filmConnector: FilmConnector) {
 
   def getRandomFilm(newGameId: String): Future[Hangman] = {
-    imdbConnector.getFilms().map { films =>
+    filmConnector.getFilms().map { films =>
       val film = films(Random.nextInt(films.length))
-      val word = film.name.toUpperCase
+      val word = film.title.toUpperCase
       val displayableChars = List(' ', '\'', '!', '?', ',', '.', '-', ':')
       Hangman(newGameId, film.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }

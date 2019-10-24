@@ -2,7 +2,7 @@ package controllers
 
 import java.util.UUID
 
-import connectors.ImdbConnector
+import connectors.FilmConnector
 import controllers.auth.AuthAction
 import javax.inject._
 import models.Hangman
@@ -11,24 +11,13 @@ import services.{DataService, HangmanService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
- * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
- */
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
                                sessionAction: AuthAction,
                                hangmanService: HangmanService,
                                dataService: DataService,
-                               imdbConnector: ImdbConnector) extends AbstractController(cc) {
+                               filmConnector: FilmConnector) extends AbstractController(cc) {
 
-  /**
-   * Create an Action to render an HTML page.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
   def index(): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
     val uuid = request.session.get("UUID").get
     hangmanService.getRandomFilm(uuid).flatMap { newGame =>
