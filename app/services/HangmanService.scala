@@ -52,9 +52,9 @@ class HangmanService @Inject()(imdbConnector: ImdbConnector) {
 
   def checkGameState(game: Hangman): String = {
     game match {
-      case Hangman(_,_, _, _, 0, _) => "Game Over"
-      case Hangman(_,word, partialWord, _, _, _) if word == partialWord => "Winner"
-      case Hangman(_,_, _, _, _, true) => "You have already guessed that letter"
+      case Hangman(_,_, _, _, 0, _,_) => "Game Over"
+      case Hangman(_,word, partialWord, _, _, _,_) if word == partialWord => "Winner"
+      case Hangman(_,_, _, _, _, true,_) => "You have already guessed that letter"
       case _ => ""
     }
   }
