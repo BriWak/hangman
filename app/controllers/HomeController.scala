@@ -20,25 +20,20 @@ class HomeController @Inject()(cc: ControllerComponents,
 
   def index(): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
     val uuid = request.session.get("UUID").get
-    hangmanService.getRandomFilm(uuid).flatMap { newGame =>
-      dataService.deleteGame(uuid).flatMap { _ =>
-        dataService.createGame(newGame).map { game =>
-          displayView(game)
-        }
-      }
-    }
+    for {
+      newGame <- hangmanService.getRandomFilm(uuid)
+      _ <- dataService.deleteGame(uuid)
+      game <- dataService.createGame(newGame)
+    } yield displayView(game)
   }
 
   def guess(letter: Char): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
     val uuid = request.session.get("UUID").get
-    dataService.readGame(uuid).flatMap { gameOption =>
-      gameOption.fold(throw new Exception("Error retrieving game")) { game =>
-        val updatedGame = hangmanService.guessLetter(letter, game)
-        dataService.updateGame(uuid, updatedGame).map { game =>
-          displayView(game)
-        }
-      }
-    }
+    for {
+      game <- dataService.readGame(uuid).map(_.getOrElse(throw new Exception("Error retrieving game")))
+      guessedGame = hangmanService.guessLetter(letter, game)
+      updatedGame <- dataService.updateGame(uuid, guessedGame)
+    } yield displayView(updatedGame)
   }
 
   def createSession(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
