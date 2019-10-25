@@ -27,7 +27,7 @@ class HangmanService @Inject()(filmConnector: FilmConnector) {
 
   def guessLetter(letter: Char, game: Hangman): Hangman = {
     val formattedLetter = letter.toUpper
-    if (game.guessedLetters.contains(formattedLetter)) {
+    if (game.guessedLetters.contains(formattedLetter.toString)) {
       game.copy(alreadyGuessed = true)
     } else {
       val wordSoFar = showLetters(formattedLetter, game)
