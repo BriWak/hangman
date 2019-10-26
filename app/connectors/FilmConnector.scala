@@ -12,19 +12,16 @@ class FilmConnector @Inject()(appConfig: ApplicationConfig,
                               wsClient: WSClient) {
 
   def getFilms(): Future[List[Film]] = {
-
     Future.sequence((1 to 20).toList.map(page => getFilmPage(page)))
       .map {
         _.flatten
           .filter(_.title.matches("([\\w '!?,-:]+)"))
           .filterNot(_.title.matches(".*[0-9].*"))
       }
-
   }
 
   private def getFilmPage(page: Int): Future[List[Film]] = {
-
-    wsClient.url(s"https://api.themoviedb.org/3/movie/top_rated?api_key=${appConfig.apiKey}&language=en-GB&page=${page}").get.map { response =>
+    wsClient.url(s"${appConfig.movieApiUrl}${page}").get.map { response =>
       response.json.as[Films].results
     }
   }

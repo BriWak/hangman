@@ -2,7 +2,7 @@ package controllers
 
 import connectors.FilmConnector
 import controllers.auth.AuthAction
-import models.Hangman
+import models.{Film, Hangman}
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -28,7 +28,6 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
     val mockHangmanService = mock[HangmanService]
     val mockDataService = mock[DataService]
-    val mockFilmConnector = mock[FilmConnector]
 
     val newGame = Hangman("game1", "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, DateTime.parse("01-01-20"))
 
@@ -41,26 +40,8 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     when(mockHangmanService.createLetters(any(), any(), any())).thenReturn(List(Letter('A', "imageUrl", "guessUrl", used = false)))
 
     "render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents(), inject[AuthAction], mockHangmanService, mockDataService, mockFilmConnector)
+      val controller = new HomeController(stubControllerComponents(), inject[AuthAction], mockHangmanService, mockDataService, inject[FilmConnector])
       val home = controller.index().apply(FakeRequest(GET, "/").withSession("UUID" -> "randomUUID"))
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Hangman")
-    }
-
-    "render the index page from the application" in {
-      val controller = inject[HomeController]
-      val home = controller.index().apply(FakeRequest(GET, "/").withSession("UUID" -> "randomUUID"))
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Hangman")
-    }
-
-    "render the index page from the router" in {
-      val request = FakeRequest(GET, "/").withSession("UUID" -> "randomUUID")
-      val home = route(app, request).get
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
