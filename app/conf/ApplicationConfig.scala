@@ -14,5 +14,5 @@ class ApplicationConfig @Inject()(
   }
 
   val expireAfterSeconds: Int = loadConfig("mongodb.expireAfterSeconds").toInt
-  val apiKey: String = loadConfig("moviedb.apikey")
+  val movieApiUrl: String = loadConfig("movie.api.url")
 }
