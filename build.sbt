@@ -34,7 +34,8 @@ lazy val root = (project in file("."))
       ws,
       "org.reactivemongo"      %% "play2-reactivemongo" % "0.18.6-play27",
       "org.scalatestplus.play" %% "scalatestplus-play"  % "4.0.3"           % Test,
-      "org.mockito"             % "mockito-all"         % "1.10.19"         % Test
+      "org.mockito"             % "mockito-all"         % "1.10.19"         % Test,
+      "com.github.tomakehurst"  % "wiremock-standalone" % "2.17.0"          % Test
     )
   )
 
