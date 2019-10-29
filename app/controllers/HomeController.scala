@@ -3,7 +3,7 @@ package controllers
 import java.util.UUID
 
 import connectors.FilmConnector
-import controllers.auth.AuthAction
+import controllers.actions.SessionAction
 import javax.inject._
 import models.Hangman
 import play.api.mvc._
@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,
-                               sessionAction: AuthAction,
+                               sessionAction: SessionAction,
                                hangmanService: HangmanService,
                                dataService: DataService,
                                filmConnector: FilmConnector) extends AbstractController(cc) {
@@ -34,10 +34,6 @@ class HomeController @Inject()(cc: ControllerComponents,
       guessedGame = hangmanService.guessLetter(letter, game)
       updatedGame <- dataService.updateGame(uuid, guessedGame)
     } yield displayView(updatedGame)
-  }
-
-  def createSession(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-      Redirect(routes.HomeController.index()).addingToSession("UUID" -> UUID.randomUUID().toString)
   }
 
   private def displayView(game: Hangman): Result = {

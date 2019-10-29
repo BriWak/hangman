@@ -1,49 +1,73 @@
 package services
 
 import connectors.FilmConnector
-import models.Hangman
+import models.{Film, Hangman, Letter}
 import org.joda.time.DateTime
 import org.scalatest.MustMatchers
+import org.mockito.Mockito._
+import org.mockito.Matchers.any
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 
+import scala.concurrent.Future
+
 class HangmanServiceSpec extends PlaySpec with MustMatchers with MockitoSugar {
 
-  val mockFilmConnector = mock[FilmConnector]
+  val mockFilmConnector: FilmConnector = mock[FilmConnector]
   val testService = new HangmanService(mockFilmConnector)
+  val createdAtDate: DateTime = DateTime.parse("01-01-20")
+
+  "getRandomFilm" must {
+    "return a new game with the correct game ID when given a game Id" in {
+
+      when(mockFilmConnector.getFilms(any())).thenReturn(Future.successful(List(Film("Film Title", 1))))
+      testService.getRandomFilm("gameID") must be
+        Future.successful(Hangman("gameID", "https://www.themoviedb.org/movie/1", "FILM TITLE", "____ _____", List(), 6))
+    }
+  }
+
+  "formatGameWord" must {
+    "correctly format a given word with non breaking spaces for display purposes" in {
+      testService.formatGameWord("TEST") mustEqual "T\u00A0E\u00A0S\u00A0T"
+    }
+
+    "correctly format more than one word with non breaking spaces for display purposes" in {
+      testService.formatGameWord("TEST WORD") mustEqual "T\u00A0E\u00A0S\u00A0T\u00A0\u00A0\nW\u00A0O\u00A0R\u00A0D"
+    }
+  }
 
   "guessLetter" must {
     "set the alreadyGuessed flag when a guess is incorrect and in the list of previous guesses" in {
-      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, createdAt = DateTime.parse("01-01-20"))
+      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, createdAt = createdAtDate)
 
       val result = testService.guessLetter('s', game)
 
-      result mustEqual Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, alreadyGuessed = true, DateTime.parse("01-01-20"))
+      result mustEqual Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, alreadyGuessed = true, createdAt = createdAtDate)
     }
 
     "set the alreadyGuessed flag when a guess is correct but in the list of previous guesses" in {
-      val game = Hangman("game1", "fakeUrl", "FILM", "F___", List("F"), 6, createdAt = DateTime.parse("01-01-20"))
+      val game = Hangman("game1", "fakeUrl", "FILM", "F___", List("F"), 6, createdAt = createdAtDate)
 
       val result = testService.guessLetter('f', game)
 
-      result mustEqual Hangman("game1", "fakeUrl", "FILM", "F___", List("F"), 6, alreadyGuessed = true, DateTime.parse("01-01-20"))
+      result mustEqual Hangman("game1", "fakeUrl", "FILM", "F___", List("F"), 6, alreadyGuessed = true, createdAt = createdAtDate)
     }
 
     "add the letter to previous guesses and reduce the remaining guess count when a guess is wrong and not in the list of previous guesses" in {
-      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5)
+      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, createdAt = createdAtDate)
 
       val result = testService.guessLetter('t', game)
 
-      result mustEqual Hangman("game1", "fakeUrl", "FILM", "____", List("S", "T"), 4, alreadyGuessed = false)
+      result mustEqual Hangman("game1", "fakeUrl", "FILM", "____", List("S", "T"), 4, createdAt = createdAtDate)
     }
 
 
     "add the letter to previous guesses and update the partial word when a guess is correct and not in the list of previous guesses" in {
-      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5)
+      val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5, createdAt = createdAtDate)
 
       val result = testService.guessLetter('i', game)
 
-      result mustEqual Hangman("game1", "fakeUrl", "FILM", "_I__", List("S", "I"), 5, alreadyGuessed = false)
+      result mustEqual Hangman("game1", "fakeUrl", "FILM", "_I__", List("S", "I"), 5, createdAt = createdAtDate)
     }
   }
 
@@ -70,6 +94,15 @@ class HangmanServiceSpec extends PlaySpec with MustMatchers with MockitoSugar {
       val game = Hangman("game1", "fakeUrl", "FILM", "____", List("S"), 5)
 
       testService.checkGameState(game) mustEqual ""
+    }
+  }
+
+  "createLetters" must {
+    "create a list of Letters when given a start letter and an end letter" in {
+      val game = Hangman("game1", "fakeUrl", "FILM", "____", List(), 6)
+
+      testService.createLetters('A', 'A', game) mustEqual
+        List(Letter('A', "/assets/images/A.png", "/A", used = false))
     }
   }
 

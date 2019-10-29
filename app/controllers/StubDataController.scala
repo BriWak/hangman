@@ -15,60 +15,44 @@ class StubDataController @Inject()(cc: ControllerComponents) extends AbstractCon
          |  "total_pages": 328,
          |  "results": [
          |    {
-         |      "popularity": 12.446,
-         |      "vote_count": 1916,
+         |      "popularity": 20.488,
+         |      "id": 629,
          |      "video": false,
-         |      "poster_path": "/hYzCLju3W74nLhhRXfPkwDi1Tun.jpg",
-         |      "id": 11216,
-         |      "adult": false,
-         |      "backdrop_path": "/tVi83ttAeyMJinYpy6xfgJSpzvP.jpg",
-         |      "original_language": "it",
-         |      "original_title": "Nuovo Cinema Paradiso",
+         |      "vote_count": 6012,
+         |      "vote_average": 8.2,
+         |      "title": "The Usual Suspects",
+         |      "release_date": "1995-08-16",
+         |      "original_language": "en",
+         |      "original_title": "The Usual Suspects",
          |      "genre_ids": [
          |        18,
-         |        10749
+         |        80,
+         |        53
          |      ],
-         |      "title": "Cinema Paradiso",
-         |      "vote_average": 8.4,
-         |      "overview": "A filmmaker recalls his childhood, when he fell in love with the movies at his village's theater and formed a deep friendship with the theater's projectionist.",
-         |      "release_date": "2002-06-14"
+         |      "backdrop_path": "/c7e3nH3wtSBDrHRB63onrGptl6D.jpg",
+         |      "adult": false,
+         |      "overview": "Held in an L.A. interrogation room, Verbal Kint attempts to convince the feds that a mythic crime lord, Keyser Soze, not only exists, but was also responsible for drawing him and his four partners into a multi-million dollar heist that ended with an explosion in San Pedro harbor – leaving few survivors. Verbal lures his interrogators with an incredible story of the crime lord's almost supernatural prowess.",
+         |      "poster_path": "/jgJoRWltoS17nD5MAQ1yK2Ztefw.jpg"
          |    },
          |    {
-         |      "popularity": 9.753,
-         |      "vote_count": 497,
+         |      "popularity": 25.765,
+         |      "vote_count": 6309,
          |      "video": false,
-         |      "poster_path": "/uHEmM49YphluJnGep8Ef1qwD2QX.jpg",
-         |      "id": 40096,
+         |      "poster_path": "/90T7b2LIrL07ndYQBmSm09yqVEH.jpg",
+         |      "id": 62,
          |      "adult": false,
-         |      "backdrop_path": "/alQqTpmEkxSLgajfEYTsTH6nAKB.jpg",
-         |      "original_language": "pt",
-         |      "original_title": "O Auto da Compadecida",
+         |      "backdrop_path": "/rkaP7dnHenOr2n2IqMxip6rtT4W.jpg",
+         |      "original_language": "en",
+         |      "original_title": "2001: A Space Odyssey",
          |      "genre_ids": [
          |        12,
-         |        35
+         |        9648,
+         |        878
          |      ],
-         |      "title": "A Dog's Will",
-         |      "vote_average": 8.4,
-         |      "overview": "The lively João Grilo and the sly Chicó are poor guys living in the hinterland who cheat a bunch of people in a small Northeast Brazil town. But when they die, they have to be judged by Christ, the Devil and the Virgin Mary, before they are admitted to paradise.",
-         |      "release_date": "2000-09-15"
-         |    },
-         |    {
-         |      "popularity": 19.258,
-         |      "vote_count": 4354,
-         |      "video": false,
-         |      "poster_path": "/wfPHdfofBD5PN96dV96a51B3Ja2.jpg",
-         |      "id": 429,
-         |      "adult": false,
-         |      "backdrop_path": "/xGC2fY5KFmtuXnsuQwYQKFOLZFy.jpg",
-         |      "original_language": "it",
-         |      "original_title": "Il buono, il brutto, il cattivo",
-         |      "genre_ids": [
-         |        37
-         |      ],
-         |      "title": "The Good, the Bad and the Ugly",
-         |      "vote_average": 8.4,
-         |      "overview": "While the Civil War rages between the Union and the Confederacy, three men – a quiet loner, a ruthless hit man and a Mexican bandit – comb the American Southwest in search of a strongbox containing £200,000 in stolen gold.",
-         |      "release_date": "1967-12-29"
+         |      "title": "2001: A Space Odyssey",
+         |      "vote_average": 8,
+         |      "overview": "Humanity finds a mysterious object buried beneath the lunar surface and sets off to find its origins with the help of HAL 9000, the world's most advanced super computer.",
+         |      "release_date": "1968-04-10"
          |    }
          |  ]
          |}

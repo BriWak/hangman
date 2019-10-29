@@ -2,8 +2,7 @@ package services
 
 import com.google.inject.Inject
 import connectors.FilmConnector
-import models.Hangman
-import viewModels.Letter
+import models.{Hangman, Letter}
 
 import scala.concurrent.Future
 import scala.util.Random
@@ -12,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class HangmanService @Inject()(filmConnector: FilmConnector) {
 
   def getRandomFilm(newGameId: String): Future[Hangman] = {
-    filmConnector.getFilms().map { films =>
+    filmConnector.getFilms(20).map { films =>
       val film = films(Random.nextInt(films.length))
       val word = film.title.toUpperCase
       val displayableChars = List(' ', '\'', '!', '?', ',', '.', '-', ':')
@@ -33,9 +32,9 @@ class HangmanService @Inject()(filmConnector: FilmConnector) {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
         val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
-        Hangman(game.gameId, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses)
+        Hangman(game.gameId, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses, game.alreadyGuessed, game.createdAt)
       } else {
-        Hangman(game.gameId, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses)
+        Hangman(game.gameId, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses, game.alreadyGuessed, game.createdAt)
       }
     }
   }

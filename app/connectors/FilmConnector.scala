@@ -11,8 +11,8 @@ import scala.concurrent.Future
 class FilmConnector @Inject()(appConfig: ApplicationConfig,
                               wsClient: WSClient) {
 
-  def getFilms(): Future[List[Film]] = {
-    Future.sequence((1 to 20).toList.map(page => getFilmPage(page)))
+  def getFilms(pagesToGet: Int): Future[List[Film]] = {
+    Future.sequence((1 to pagesToGet).toList.map(page => getFilmPage(page)))
       .map {
         _.flatten
           .filter(_.title.matches("([\\w '!?,-:]+)"))
