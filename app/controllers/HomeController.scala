@@ -1,11 +1,9 @@
 package controllers
 
-import java.util.UUID
-
 import connectors.FilmConnector
 import controllers.actions.SessionAction
 import javax.inject._
-import models.Hangman
+import models.{GameRequest, Hangman}
 import play.api.mvc._
 import services.{DataService, HangmanService}
 
@@ -18,8 +16,8 @@ class HomeController @Inject()(cc: ControllerComponents,
                                dataService: DataService,
                                filmConnector: FilmConnector) extends AbstractController(cc) {
 
-  def index(): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
-    val uuid = request.session.get("UUID").get
+  def index(): Action[AnyContent] = sessionAction.async { implicit request: GameRequest =>
+    val uuid = request.gameId
     for {
       newGame <- hangmanService.getRandomFilm(uuid)
       _ <- dataService.deleteGame(uuid)
@@ -27,8 +25,8 @@ class HomeController @Inject()(cc: ControllerComponents,
     } yield displayView(game)
   }
 
-  def guess(letter: Char): Action[AnyContent] = sessionAction.async { implicit request: Request[AnyContent] =>
-    val uuid = request.session.get("UUID").get
+  def guess(letter: Char): Action[AnyContent] = sessionAction.async { implicit request: GameRequest[AnyContent] =>
+    val uuid = request.gameId
     for {
       game <- dataService.readGame(uuid).map(_.getOrElse(throw new Exception("Error retrieving game")))
       guessedGame = hangmanService.guessLetter(letter, game)
