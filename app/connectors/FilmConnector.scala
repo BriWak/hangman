@@ -21,6 +21,7 @@ class FilmConnector @Inject()(appConfig: ApplicationConfig,
   }
 
   private def getFilmPage(page: Int): Future[List[Film]] = {
+
     wsClient.url(s"${appConfig.movieApiUrl}${page}").get.map { response =>
       response.json.as[Films].results
     }
