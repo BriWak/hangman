@@ -6,7 +6,6 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 GET     /:guess                     controllers.HomeController.guess(guess: Char)
-GET    /session/                    controllers.HomeController.createSession
 
 GET    /stubApi/:page               controllers.StubDataController.stubMovieDbUrl(page: Int)
 

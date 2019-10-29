@@ -1,17 +1,43 @@
-name := """hangman"""
-organization := "com.example"
+import sbt.Keys.name
+import scoverage.ScoverageKeys
 
-version := "1.0-SNAPSHOT"
+val ScoverageExclusionPatterns = List(
+  "<empty>",
+  "app.*",
+  "config.*",
+  "views.*",
+  "models.*",
+  ".*StubDataController.*",
+  ".*Routes.*",
+  ".*Reverse.*"
+)
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val scoverageSettings = {
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("", ";", ""),
+    ScoverageKeys.coverageMinimum := 85,
+    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
 
-scalaVersion := "2.13.0"
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
+  .settings(
+    scoverageSettings,
+    scalaVersion := "2.13.0",
+    name := """hangman""",
+    organization := "com.example",
+    version := "1.0-SNAPSHOT",
+    libraryDependencies ++= Seq(
+      guice,
+      ws,
+      "org.reactivemongo"      %% "play2-reactivemongo" % "0.18.6-play27",
+      "org.scalatestplus.play" %% "scalatestplus-play"  % "4.0.3"           % Test,
+      "org.mockito"             % "mockito-all"         % "1.10.19"         % Test
+    )
+  )
 
-libraryDependencies += guice
-libraryDependencies += "org.reactivemongo"      %% "play2-reactivemongo" % "0.18.6-play27"
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
-libraryDependencies += "org.mockito" % "mockito-all" % "1.10.19" % Test
-libraryDependencies += ws
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
 
