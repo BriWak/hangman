@@ -16,7 +16,7 @@ class SessionAction @Inject()(val parser: BodyParsers.Default)(implicit val exec
     Future.successful(
       request.session.get("UUID")
         .fold[Either[Result, GameRequest[A]]] {
-          Left(Redirect(controllers.routes.HomeController.index()).withSession("UUID" -> UUID.randomUUID().toString))
+          Left(Redirect(controllers.routes.HomeController.home()).withSession("UUID" -> UUID.randomUUID().toString))
         }(uuid => Right(GameRequest(uuid, request)))
     )
   }

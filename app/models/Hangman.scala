@@ -3,7 +3,7 @@ package models
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json._
 
-case class Hangman(gameId: String, url: String, word: String, partialWord: String, guessedLetters: List[String], remainingGuesses: Int, alreadyGuessed: Boolean = false, createdAt: DateTime = DateTime.now)
+case class Hangman(gameId: String, gameType: GameType, url: String, word: String, partialWord: String, guessedLetters: List[String], remainingGuesses: Int, alreadyGuessed: Boolean = false, createdAt: DateTime = DateTime.now)
 
 object Hangman {
 

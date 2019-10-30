@@ -3,7 +3,7 @@ package controllers
 import connectors.FilmConnector
 import controllers.actions.SessionAction
 import javax.inject._
-import models.{GameRequest, Hangman}
+import models.{FilmGame, GameRequest, GameType, Hangman, TVGame}
 import play.api.mvc._
 import services.{DataService, HangmanService}
 
@@ -16,10 +16,23 @@ class HomeController @Inject()(cc: ControllerComponents,
                                dataService: DataService,
                                filmConnector: FilmConnector) extends AbstractController(cc) {
 
-  def index(): Action[AnyContent] = sessionAction.async { implicit request =>
+  def home(): Action[AnyContent] = sessionAction { implicit request =>
+    Ok(views.html.home())
+  }
+
+  def films(): Action[AnyContent] = sessionAction.async { implicit request =>
     val gameId = request.gameId
     for {
       newGame <- hangmanService.getRandomFilm(gameId)
+      _ <- dataService.deleteGame(gameId)
+      game <- dataService.createGame(newGame)
+    } yield displayView(game)
+  }
+
+  def tvShows(): Action[AnyContent] = sessionAction.async { implicit request =>
+    val gameId = request.gameId
+    for {
+      newGame <- hangmanService.getRandomTVShow(gameId)
       _ <- dataService.deleteGame(gameId)
       game <- dataService.createGame(newGame)
     } yield displayView(game)
@@ -39,6 +52,6 @@ class HomeController @Inject()(cc: ControllerComponents,
     val gameWord = hangmanService.formatGameWord(partialWord)
     val gameState = hangmanService.checkGameState(game)
     val letters = hangmanService.createLetters('A', 'Z', game)
-    Ok(views.html.index(gameWord, gameState, game, letters))
+    Ok(views.html.game(gameWord, gameState, game, letters))
   }
 }

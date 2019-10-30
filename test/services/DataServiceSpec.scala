@@ -1,6 +1,6 @@
 package services
 
-import models.Hangman
+import models.{FilmGame, Hangman}
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone.UTC
 import org.mockito.Matchers.any
@@ -23,7 +23,7 @@ class DataServiceSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting w
     val dataService = inject[DataService]
     val mockGameRepository = mock[GameRepository]
 
-    val game = Hangman("game1", "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, DateTime.parse("01-01-20").toDateTime(UTC))
+    val game = Hangman("game1", FilmGame(), "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, DateTime.parse("01-01-20").toDateTime(UTC))
 
     "create a new game in the database" in {
       when(mockGameRepository.create(any())).thenReturn(Future.successful(game))

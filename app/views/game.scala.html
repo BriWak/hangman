@@ -1,4 +1,5 @@
 @import models.Letter
+@import models.Hangman
 
 @(formattedGameWord: String, gameState: String, game: Hangman, letters: List[Letter])
 
@@ -18,10 +19,10 @@
 
     <P class="gameBoard  @("won".when(gameState == "Winner")) @("lost".when(gameState == "Game Over"))">@formattedGameWord</P>
 
-
     @if(gameState == "Winner" || gameState == "Game Over") {
-        <p><a href="@game.url">View details of this film</a></p>
-        <a class="button" href="@routes.HomeController.index()">Play Again</a>
+        <p><a href="@game.url">View details</a></p>
+        <a class="button" href="@game.gameType.newGameUrl">Play Again</a><br><br>
+        <a class="button" href="@routes.HomeController.home()">Choose Another Game</a>
     } else {
         @letterBoard(letters)
     }

@@ -1,0 +1,12 @@
+
+@()
+
+@main("Welcome to Hangman") {
+    <h1>Welcome to Hangman!</h1>
+
+    <h2>Choose your game type</h2>
+    <a class="button square" href="@routes.HomeController.films()">Films</a>
+    <a class="button square" href="@routes.HomeController.tvShows()">TV Shows</a>
+    <img src="@routes.Assets.versioned("images/moviedb.svg")" class="poweredbyHome" alt="Powered by the movie DB">
+
+}

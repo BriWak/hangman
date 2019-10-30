@@ -2,7 +2,7 @@ package connectors
 
 import com.google.inject.Inject
 import conf.ApplicationConfig
-import models.{Film, Films}
+import models.{Film, Films, TVShow, TVShows}
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,9 +21,23 @@ class FilmConnector @Inject()(appConfig: ApplicationConfig,
   }
 
   private def getFilmPage(page: Int): Future[List[Film]] = {
-
     wsClient.url(s"${appConfig.movieApiUrl}${page}").get.map { response =>
       response.json.as[Films].results
+    }
+  }
+
+  def getTVShows(pagesToGet: Int): Future[List[TVShow]] = {
+    Future.sequence((1 to pagesToGet).toList.map(page => getTVPage(page)))
+      .map {
+        _.flatten
+          .filter(_.name.matches("([\\w '!?,-:]+)"))
+          .filterNot(_.name.matches(".*[0-9].*"))
+      }
+  }
+
+  private def getTVPage(page: Int): Future[List[TVShow]] = {
+    wsClient.url(s"${appConfig.tvApiUrl}${page}").get.map { response =>
+      response.json.as[TVShows].results
     }
   }
 }

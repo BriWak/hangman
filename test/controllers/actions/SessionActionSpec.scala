@@ -24,7 +24,7 @@ object TestController {
 }
 
   "SessionAction" must {
-    "redirect to the index page when a session does not contain a UUID" in {
+    "redirect to the game page when a session does not contain a UUID" in {
       val result = TestController.testMethod()(FakeRequest())
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/")
