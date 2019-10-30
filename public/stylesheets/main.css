@@ -6,6 +6,13 @@ p, h1 {
 padding: 10px;
 }
 
+.poweredbyHome {
+    width: 200px;
+    margin: auto;
+    padding: 20px;
+    display: block;
+}
+
 .poweredby {
     width: 120px;
     transform: translate(80%,0);
@@ -114,6 +121,11 @@ padding: 10px;
     transform: scale(0.98);
 }
 
+.square {
+    line-height: 5em;
+    height: 5rem;
+    width: 5rem;
+}
 @media screen and (max-width: 600px) {
     .poweredby {
         width: 70px;

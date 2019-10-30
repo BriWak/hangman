@@ -2,7 +2,7 @@ package services
 
 import com.google.inject.Inject
 import connectors.FilmConnector
-import models.{Hangman, Letter}
+import models.{FilmGame, Hangman, Letter, TVGame}
 
 import scala.concurrent.Future
 import scala.util.Random
@@ -10,12 +10,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class HangmanService @Inject()(filmConnector: FilmConnector) {
 
+  val displayableChars: List[Char] = List(' ', '\'', '!', '?', ',', '.', '-', ':')
+
   def getRandomFilm(newGameId: String): Future[Hangman] = {
     filmConnector.getFilms(20).map { films =>
       val film = films(Random.nextInt(films.length))
       val word = film.title.toUpperCase
-      val displayableChars = List(' ', '\'', '!', '?', ',', '.', '-', ':')
-      Hangman(newGameId, film.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
+      Hangman(newGameId, FilmGame(), film.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
+    }
+  }
+
+  def getRandomTVShow(newGameId: String): Future[Hangman] = {
+    filmConnector.getTVShows(20).map { tvShows =>
+      val tvShow = tvShows(Random.nextInt(tvShows.length))
+      val word = tvShow.name.toUpperCase
+      Hangman(newGameId, TVGame(), tvShow.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }
   }
 
@@ -32,9 +41,11 @@ class HangmanService @Inject()(filmConnector: FilmConnector) {
       val wordSoFar = showLetters(formattedLetter, game)
       if (wordSoFar == game.partialWord) {
         val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
-        Hangman(game.gameId, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses, game.alreadyGuessed, game.createdAt)
+        game.copy(guessedLetters = game.guessedLetters :+ formattedLetter.toString, remainingGuesses = remainingGuesses)
+//        Hangman(game.gameId, game.gameType, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses, game.alreadyGuessed, game.createdAt)
       } else {
-        Hangman(game.gameId, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses, game.alreadyGuessed, game.createdAt)
+        game.copy(partialWord = wordSoFar, guessedLetters = game.guessedLetters :+ formattedLetter.toString)
+//        Hangman(game.gameId, game.gameType, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses, game.alreadyGuessed, game.createdAt)
       }
     }
   }
@@ -52,9 +63,9 @@ class HangmanService @Inject()(filmConnector: FilmConnector) {
 
   def checkGameState(game: Hangman): String = {
     game match {
-      case Hangman(_,_,_, _, _, 0, _,_) => "Game Over"
-      case Hangman(_,_,word, partialWord, _, _, _,_) if word == partialWord => "Winner"
-      case Hangman(_,_,_, _, _, _, true,_) => "You have already guessed that letter"
+      case Hangman(_,_,_,_, _, _, 0, _,_) => "Game Over"
+      case Hangman(_,_,_,word, partialWord, _, _, _,_) if word == partialWord => "Winner"
+      case Hangman(_,_,_,_, _, _, _, true,_) => "You have already guessed that letter"
       case _ => ""
     }
   }

@@ -2,7 +2,7 @@ package controllers
 
 import connectors.FilmConnector
 import controllers.actions.SessionAction
-import models.{Hangman, Letter}
+import models.{FilmGame, Hangman, Letter}
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -22,7 +22,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     val mockHangmanService = mock[HangmanService]
     val mockDataService = mock[DataService]
 
-    val game = Hangman("game1", "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, DateTime.parse("01-01-20"))
+    val game = Hangman("game1", FilmGame(), "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, DateTime.parse("01-01-20"))
 
     when(mockHangmanService.getRandomFilm(any())).thenReturn(Future.successful(game))
     when(mockDataService.deleteGame(any())).thenReturn(Future.successful(true))
@@ -33,9 +33,9 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     when(mockHangmanService.checkGameState(any())).thenReturn("")
     when(mockHangmanService.createLetters(any(), any(), any())).thenReturn(List(Letter('A', "imageUrl", "guessUrl", used = false)))
 
-    "render the index page with a new game from the index method" in {
+    "render the game page with a new game from the game method" in {
       val controller = new HomeController(stubControllerComponents(), inject[SessionAction], mockHangmanService, mockDataService, inject[FilmConnector])
-      val home = controller.index()(FakeRequest().withSession("UUID" -> "randomUUID"))
+      val home = controller.films()(FakeRequest().withSession("UUID" -> "randomUUID"))
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
@@ -43,7 +43,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     }
 
 
-    "render the index page with an updated game from the guess method" in {
+    "render the game page with an updated game from the guess method" in {
       val controller = new HomeController(stubControllerComponents(), inject[SessionAction], mockHangmanService, mockDataService, inject[FilmConnector])
       val home = controller.guess('A')(FakeRequest().withSession("UUID" -> "randomUUID"))
 

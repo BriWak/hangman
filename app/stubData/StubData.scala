@@ -56,4 +56,37 @@ object StubData {
          |}
          |""".stripMargin)
   }
+
+  def tvData(page: Int): JsValue = {
+    Json.parse(
+      s"""{
+         |  "page": 1,
+         |  "total_results": 646,
+         |  "total_pages": 33,
+         |  "results": [
+         |    {
+         |      "original_name": "Stranger Things",
+         |      "genre_ids": [
+         |        18,
+         |        9648,
+         |        10765
+         |      ],
+         |      "name": "Stranger Things",
+         |      "popularity": 83.119,
+         |      "origin_country": [
+         |        "US"
+         |      ],
+         |      "vote_count": 2709,
+         |      "first_air_date": "2016-07-15",
+         |      "backdrop_path": "/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
+         |      "original_language": "en",
+         |      "id": 66732,
+         |      "vote_average": 8.3,
+         |      "overview": "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
+         |      "poster_path": "/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg"
+         |    }
+         |  ]
+         |}""".stripMargin
+    )
+  }
 }
