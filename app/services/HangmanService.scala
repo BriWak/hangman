@@ -42,10 +42,8 @@ class HangmanService @Inject()(filmConnector: FilmConnector) {
       if (wordSoFar == game.partialWord) {
         val remainingGuesses = if (game.remainingGuesses <= 0) 0 else game.remainingGuesses - 1
         game.copy(guessedLetters = game.guessedLetters :+ formattedLetter.toString, remainingGuesses = remainingGuesses)
-//        Hangman(game.gameId, game.gameType, game.url, game.word, game.partialWord, game.guessedLetters :+ formattedLetter.toString, remainingGuesses, game.alreadyGuessed, game.createdAt)
       } else {
         game.copy(partialWord = wordSoFar, guessedLetters = game.guessedLetters :+ formattedLetter.toString)
-//        Hangman(game.gameId, game.gameType, game.url, game.word, wordSoFar, game.guessedLetters :+ formattedLetter.toString, game.remainingGuesses, game.alreadyGuessed, game.createdAt)
       }
     }
   }
