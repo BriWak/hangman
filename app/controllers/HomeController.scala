@@ -3,7 +3,7 @@ package controllers
 import connectors.FilmConnector
 import controllers.actions.SessionAction
 import javax.inject._
-import models.{FilmGame, GameRequest, GameType, Hangman, TVGame}
+import models.Hangman
 import play.api.mvc._
 import services.{DataService, HangmanService}
 
