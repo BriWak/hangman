@@ -24,7 +24,7 @@ class FilmRepository @Inject()(val reactiveMongoApi: ReactiveMongoApi,
   def createFilmList(value: Films): Future[Films] = {
     collection.flatMap(_.indexesManager.ensure(Index(Seq("createdAt" -> IndexType.Ascending),
       name = Some("createdAt"),
-      options = BSONDocument("expireAfterSeconds" -> config.expireAfterSeconds))))
+      options = BSONDocument("expireAfterSeconds" -> config.apiDataExpireAfterSeconds))))
     collection.flatMap(_.insert.one(value)).map(result => if (result.ok) value else throw new RuntimeException("Error storing films"))
   }
 
