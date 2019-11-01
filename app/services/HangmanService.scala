@@ -1,14 +1,13 @@
 package services
 
 import com.google.inject.Inject
-import connectors.FilmConnector
 import models.{FilmGame, Hangman, Letter, TVGame}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Random
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class HangmanService @Inject()(filmConnector: FilmConnector, dataService: DataService) {
+class HangmanService @Inject()(dataService: DataService) {
 
   val displayableChars: List[Char] = List(' ', '\'', '!', '?', ',', '.', '-', ':')
 

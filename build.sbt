@@ -7,6 +7,7 @@ val ScoverageExclusionPatterns = List(
   "config.*",
   "views.*",
   "models.*",
+  "repositories.*",
   ".*StubDataController.*",
   ".*Routes.*",
   ".*Reverse.*"

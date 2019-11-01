@@ -1,7 +1,7 @@
 package services
 
 import connectors.FilmConnector
-import models.{Film, FilmGame, Hangman, Letter}
+import models.{Film, FilmGame, Films, Hangman, Letter, TVGame, TVShow, TVShows}
 import org.joda.time.DateTime
 import org.scalatest.MustMatchers
 import org.mockito.Mockito._
@@ -13,16 +13,25 @@ import scala.concurrent.Future
 
 class HangmanServiceSpec extends PlaySpec with MustMatchers with MockitoSugar {
 
-  val mockFilmConnector: FilmConnector = mock[FilmConnector]
-  val testService = new HangmanService(mockFilmConnector)
+  val mockDataService: DataService = mock[DataService]
+  val testService = new HangmanService(mockDataService)
   val createdAtDate: DateTime = DateTime.parse("01-01-20")
 
   "getRandomFilm" must {
-    "return a new game with the correct game ID when given a game Id" in {
+    "return a new film game with the correct game ID when given a game Id" in {
 
-      when(mockFilmConnector.getFilms(any())).thenReturn(Future.successful(List(Film("Film Title", 1))))
+      when(mockDataService.getFilms()).thenReturn(Future.successful(Films(List(Film("Film Title", 1)))))
       testService.getRandomFilm("gameID") must be
         Future.successful(Hangman("gameID", FilmGame(), "https://www.themoviedb.org/movie/1", "FILM TITLE", "____ _____", List(), 6))
+    }
+  }
+
+  "getRandomTVShow" must {
+    "return a new TV game with the correct game ID when given a game Id" in {
+
+      when(mockDataService.getTVShows()).thenReturn(Future.successful(TVShows(List(TVShow("Show Title", 1)))))
+      testService.getRandomTVShow("gameID") must be
+      Future.successful(Hangman("gameID", TVGame(), "https://www.themoviedb.org/tv/1", "SHOW TITLE", "____ _____", List(), 6))
     }
   }
 
