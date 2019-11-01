@@ -3,12 +3,12 @@ package services
 import com.google.inject.Inject
 import connectors.FilmConnector
 import models.{Films, Hangman, TVShows}
-import repositories.{DataRepository, GameRepository}
+import repositories.{FilmRepository, GameRepository, TVRepository}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DataService @Inject()(gameRepository: GameRepository, dataRepository: DataRepository, filmConnector: FilmConnector) {
+class DataService @Inject()(gameRepository: GameRepository, filmRepository: FilmRepository, tvRepository: TVRepository, filmConnector: FilmConnector) {
 
   def createGame(newGame: Hangman): Future[Hangman] = {
     gameRepository.create(newGame)
@@ -27,22 +27,22 @@ class DataService @Inject()(gameRepository: GameRepository, dataRepository: Data
   }
 
   def createFilms(filmList: Films): Future[Films] = {
-    dataRepository.createFilmList(filmList)
+    filmRepository.createFilmList(filmList)
   }
 
   def getFilms(): Future[Films] = {
-    dataRepository.findFilmList().flatMap{
+    filmRepository.findFilmList().flatMap{
       case Some(films) => Future.successful(films)
       case None => filmConnector.getFilms(20).flatMap(filmList => createFilms(Films(filmList)))
     }
   }
 
   def createTVShows(TVList: TVShows): Future[TVShows] = {
-    dataRepository.createTVList(TVList)
+    tvRepository.createTVList(TVList)
   }
 
   def getTVShows(): Future[TVShows] = {
-    dataRepository.findTVList().flatMap{
+    tvRepository.findTVList().flatMap{
       case Some(tvShows) => Future.successful(tvShows)
       case None => filmConnector.getTVShows(20).flatMap(tvList => createTVShows(TVShows(tvList)))
     }
