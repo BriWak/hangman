@@ -1,12 +1,14 @@
 package services
 
 import com.google.inject.Inject
-import models.Hangman
-import repositories.GameRepository
+import connectors.FilmConnector
+import models.{Films, Hangman, TVShows}
+import repositories.{FilmRepository, GameRepository, TVRepository}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DataService @Inject()(gameRepository: GameRepository) {
+class DataService @Inject()(gameRepository: GameRepository, filmRepository: FilmRepository, tvRepository: TVRepository, filmConnector: FilmConnector) {
 
   def createGame(newGame: Hangman): Future[Hangman] = {
     gameRepository.create(newGame)
@@ -23,4 +25,27 @@ class DataService @Inject()(gameRepository: GameRepository) {
   def deleteGame(id: String): Future[Boolean] = {
     gameRepository.deleteByGameId(id)
   }
+
+  def createFilms(filmList: Films): Future[Films] = {
+    filmRepository.createFilmList(filmList)
+  }
+
+  def getFilms(): Future[Films] = {
+    filmRepository.findFilmList().flatMap{
+      case Some(films) => Future.successful(films)
+      case None => filmConnector.getFilms(20).flatMap(filmList => createFilms(Films(filmList)))
+    }
+  }
+
+  def createTVShows(TVList: TVShows): Future[TVShows] = {
+    tvRepository.createTVList(TVList)
+  }
+
+  def getTVShows(): Future[TVShows] = {
+    tvRepository.findTVList().flatMap{
+      case Some(tvShows) => Future.successful(tvShows)
+      case None => filmConnector.getTVShows(20).flatMap(tvList => createTVShows(TVShows(tvList)))
+    }
+  }
+
 }

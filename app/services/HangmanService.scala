@@ -8,21 +8,21 @@ import scala.concurrent.Future
 import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HangmanService @Inject()(filmConnector: FilmConnector) {
+class HangmanService @Inject()(filmConnector: FilmConnector, dataService: DataService) {
 
   val displayableChars: List[Char] = List(' ', '\'', '!', '?', ',', '.', '-', ':')
 
   def getRandomFilm(newGameId: String): Future[Hangman] = {
-    filmConnector.getFilms(20).map { films =>
-      val film = films(Random.nextInt(films.length))
+    dataService.getFilms().map { films =>
+      val film = films.results(Random.nextInt(films.results.length))
       val word = film.title.toUpperCase
       Hangman(newGameId, FilmGame(), film.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }
   }
 
   def getRandomTVShow(newGameId: String): Future[Hangman] = {
-    filmConnector.getTVShows(20).map { tvShows =>
-      val tvShow = tvShows(Random.nextInt(tvShows.length))
+    dataService.getTVShows().map { tvShows =>
+      val tvShow = tvShows.results(Random.nextInt(tvShows.results.length))
       val word = tvShow.name.toUpperCase
       Hangman(newGameId, TVGame(), tvShow.url, word, word.map(char => if (displayableChars.contains(char)) char else '_'), List.empty[String], 6)
     }
