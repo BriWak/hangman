@@ -37,7 +37,7 @@ class FilmConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting
       val result = filmConnector.getFilms(1)
 
       Await.result(result, 5.seconds) mustBe
-        List(Film("The Usual Suspects", 629))
+        List(Film("The Usual Suspects", 629, List(18, 80, 53)))
     }
   }
 
@@ -57,7 +57,7 @@ class FilmConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting
       val result = filmConnector.getTVShows(1)
 
       Await.result(result, 5.seconds) mustBe
-        List(TVShow("Stranger Things", 66732))
+        List(TVShow("Stranger Things", 66732, List(18, 9648, 10765)))
     }
   }
 

@@ -31,8 +31,8 @@ class DataServiceSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting w
     val createdAtDate: DateTime = DateTime.parse("01-01-20").toDateTime(UTC)
 
     val game = Hangman("game1", FilmGame(), "fakeUrl", "FILM", "____", List(), 6, alreadyGuessed = false, createdAtDate)
-    val filmList = Films(List(Film("Film", 1)), createdAtDate)
-    val tvList = TVShows(List(TVShow("TV SHow", 1)), createdAtDate)
+    val filmList = Films(List(Film("Film", 1, List())), createdAtDate)
+    val tvList = TVShows(List(TVShow("TV SHow", 1, List())), createdAtDate)
 
     "create a new game in the database" in {
       when(mockGameRepository.create(any())).thenReturn(Future.successful(game))
@@ -78,7 +78,7 @@ class DataServiceSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting w
 
     "read films from the API if the database is empty" in {
       when(mockFilmRepository.findFilmList()).thenReturn(Future.successful(None))
-      when(mockFilmConnector.getFilms(any())).thenReturn(Future.successful(List(Film("Film", 1))))
+      when(mockFilmConnector.getFilms(any())).thenReturn(Future.successful(List(Film("Film", 1, List()))))
       val result = dataService.getFilms()
 
       Await.result(result, 5.seconds) mustBe filmList
@@ -100,7 +100,7 @@ class DataServiceSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting w
 
     "read TV shows from the API if the database is empty" in {
       when(mockTVRepository.findTVList()).thenReturn(Future.successful(None))
-      when(mockFilmConnector.getTVShows(any())).thenReturn(Future.successful(List(TVShow("TV SHow", 1))))
+      when(mockFilmConnector.getTVShows(any())).thenReturn(Future.successful(List(TVShow("TV SHow", 1, List()))))
       val result = dataService.getTVShows()
 
       Await.result(result, 5.seconds) mustBe tvList

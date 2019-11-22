@@ -33,7 +33,7 @@ class DataService @Inject()(gameRepository: GameRepository, filmRepository: Film
   def getFilms(): Future[Films] = {
     filmRepository.findFilmList().flatMap{
       case Some(films) => Future.successful(films)
-      case None => filmConnector.getFilms(20).flatMap(filmList => createFilms(Films(filmList)))
+      case None => filmConnector.getFilms(25).flatMap(filmList => createFilms(Films(filmList)))
     }
   }
 
@@ -44,7 +44,7 @@ class DataService @Inject()(gameRepository: GameRepository, filmRepository: Film
   def getTVShows(): Future[TVShows] = {
     tvRepository.findTVList().flatMap{
       case Some(tvShows) => Future.successful(tvShows)
-      case None => filmConnector.getTVShows(20).flatMap(tvList => createTVShows(TVShows(tvList)))
+      case None => filmConnector.getTVShows(25).flatMap(tvList => createTVShows(TVShows(tvList)))
     }
   }
 

@@ -20,7 +20,7 @@ class HangmanServiceSpec extends PlaySpec with MustMatchers with MockitoSugar {
   "getRandomFilm" must {
     "return a new film game with the correct game ID when given a game Id" in {
 
-      when(mockDataService.getFilms()).thenReturn(Future.successful(Films(List(Film("Film Title", 1)))))
+      when(mockDataService.getFilms()).thenReturn(Future.successful(Films(List(Film("Film Title", 1, List())))))
       testService.getRandomFilm("gameID") must be
         Future.successful(Hangman("gameID", FilmGame(), "https://www.themoviedb.org/movie/1", "FILM TITLE", "____ _____", List(), 6))
     }
@@ -29,7 +29,7 @@ class HangmanServiceSpec extends PlaySpec with MustMatchers with MockitoSugar {
   "getRandomTVShow" must {
     "return a new TV game with the correct game ID when given a game Id" in {
 
-      when(mockDataService.getTVShows()).thenReturn(Future.successful(TVShows(List(TVShow("Show Title", 1)))))
+      when(mockDataService.getTVShows()).thenReturn(Future.successful(TVShows(List(TVShow("Show Title", 1, List())))))
       testService.getRandomTVShow("gameID") must be
       Future.successful(Hangman("gameID", TVGame(), "https://www.themoviedb.org/tv/1", "SHOW TITLE", "____ _____", List(), 6))
     }

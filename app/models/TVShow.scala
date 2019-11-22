@@ -4,14 +4,15 @@ import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OFormat, OWrites, Reads, Writes, __}
 
-case class TVShow(name: String, id: Int) {
+case class TVShow(name: String, id: Int, genreIDs: List[Int]) {
   def url = s"https://www.themoviedb.org/tv/${id}"
 }
 
 object TVShow {
   implicit val reads: Reads[TVShow] = (
     (JsPath \ "name").read[String] and
-      (JsPath \ "id").read[Int]
+      (JsPath \ "id").read[Int] and
+      (JsPath \ "genre_ids").read[List[Int]]
     )(TVShow.apply _)
 
   implicit val writes: Writes[TVShow] = Json.writes[TVShow]
