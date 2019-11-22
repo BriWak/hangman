@@ -4,7 +4,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OFormat, OWrites, Reads, Writes, __}
 
-case class Film(title: String, id: Int, genreIDs: List[Int]) {
+case class Film(title: String, id: Int, genre_ids: List[Int]) {
   def url = s"https://www.themoviedb.org/movie/${id}"
 }
 

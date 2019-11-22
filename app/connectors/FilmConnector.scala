@@ -17,7 +17,7 @@ class FilmConnector @Inject()(appConfig: ApplicationConfig,
         _.flatten
           .filter(_.title.matches("([\\w '!?,-:]+)"))
           .filterNot(_.title.matches(".*[0-9].*"))
-          .filterNot(_.genreIDs.contains(16))
+          .filterNot(_.genre_ids.contains(16))
       }
   }
 
@@ -34,7 +34,7 @@ class FilmConnector @Inject()(appConfig: ApplicationConfig,
         _.flatten
           .filter(_.name.matches("([\\w '!?,-:]+)"))
           .filterNot(_.name.matches(".*[0-9].*"))
-          .filterNot(_.genreIDs.contains(16))
+          .filterNot(_.genre_ids.contains(16))
       }
   }
 
